@@ -8,7 +8,7 @@ const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 const getWord = async function () {
@@ -42,7 +42,7 @@ const updateWordInProgress = function (word) {
     };
     placeHolder = placeHolder.join("");
     console.log(placeHolder);
-    wordInProgress.append(placeHolder);
+    wordInProgress.innerText = placeHolder;
 };
 
 guessButton.addEventListener("click", function(e) {
@@ -123,7 +123,8 @@ const countRemainingGuesses = function (guess) {
         message.innerText = `Sorry, Game Over. No more guesses remain. The word is ${wordUpper}`;
         spanRemainGuess.innerText = "no more guesses";
         inputBox.disabled = true;
-        guessButton.disabled = true;
+        // guessButton.disabled = true;
+        startOver();
     } else if (remainingGuesses === 1) {
         spanRemainGuess.innerText = `${remainingGuesses} guess`;
     } else if (remainingGuesses > 1) {
@@ -136,6 +137,32 @@ const wonGame = function () {
         message.classList.add("win");
         message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>'; 
         inputBox.disabled = true;
-        guessButton.disabled = true;
+        // guessButton.disabled = true;
+        startOver();
     };
 };
+
+const startOver = function () {
+    guessButton.classList.add("hide");
+    remainingGuess.classList.add("hide");
+    guessList.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
+
+playAgainButton.addEventListener("click", function() {
+    message.classList.remove("win");
+    message.innerHTML = "";
+    guessList.innerHTML = "";
+
+    remainingGuesses = 8;
+    guessedLetters = [];
+
+    spanRemainGuess.innerText = `${remainingGuesses} guesses`;
+    guessButton.classList.remove("hide");
+    remainingGuess.classList.remove("hide");
+    guessList.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    inputBox.disabled = false;
+
+    getWord();
+});
